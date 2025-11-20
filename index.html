@@ -1166,3 +1166,213 @@
                 }
                 
                 // ایجاد کاربر جدید
+                const newUser = {
+                    id: Date.now(),
+                    name: fullName,
+                    email: email,
+                    password: password, // در حالت واقعی این رمز باید هش شود
+                    handle: '@' + fullName.replace(/\s+/g, '').toLowerCase(),
+                    joinDate: new Date().toISOString()
+                };
+                
+                users.push(newUser);
+                localStorage.setItem('users', JSON.stringify(users));
+                
+                currentUser = newUser;
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                
+                showNotification('حساب کاربری با موفقیت ایجاد شد');
+                showApp();
+            }
+        });
+        
+        // مدیریت ورود
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
+            
+            let isValid = true;
+            
+            // اعتبارسنجی ایمیل
+            if (email === '') {
+                document.getElementById('loginEmailError').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('loginEmailError').style.display = 'none';
+            }
+            
+            // اعتبارسنجی رمز عبور
+            if (password === '') {
+                document.getElementById('loginPasswordError').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('loginPasswordError').style.display = 'none';
+            }
+            
+            if (isValid) {
+                // بررسی وجود کاربر
+                const user = users.find(u => u.email === email && u.password === password);
+                
+                if (user) {
+                    currentUser = user;
+                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                    
+                    showNotification('با موفقیت وارد شدید');
+                    showApp();
+                } else {
+                    showNotification('ایمیل یا رمز عبور نادرست است', 'error');
+                }
+            }
+        });
+        
+        // فعال کردن دکمه توییت هنگام تایپ
+        tweetTextarea.addEventListener('input', function() {
+            if (this.value.trim().length > 0) {
+                tweetButton.disabled = false;
+            } else {
+                tweetButton.disabled = true;
+            }
+        });
+        
+        // مدیریت ارسال توییت
+        tweetButton.addEventListener('click', function() {
+            const tweetText = tweetTextarea.value.trim();
+            if (tweetText && currentUser) {
+                const newTweet = {
+                    id: Date.now(),
+                    author: currentUser.name,
+                    handle: currentUser.handle,
+                    avatar: currentUser.name.charAt(0),
+                    content: tweetText,
+                    time: 'همین الان',
+                    likes: 0,
+                    retweets: 0,
+                    comments: 0,
+                    liked: false,
+                    retweeted: false
+                };
+                
+                tweets.unshift(newTweet);
+                localStorage.setItem('tweets', JSON.stringify(tweets));
+                
+                tweetTextarea.value = '';
+                tweetButton.disabled = true;
+                
+                renderTweets();
+                showNotification('توییت شما با موفقیت ارسال شد');
+            }
+        });
+        
+        // نمایش توییت‌ها
+        function renderTweets() {
+            tweetFeed.innerHTML = '';
+            
+            tweets.forEach(tweet => {
+                const tweetElement = document.createElement('div');
+                tweetElement.className = 'tweet';
+                tweetElement.innerHTML = `
+                    <div class="tweet-avatar">${tweet.avatar}</div>
+                    <div class="tweet-content">
+                        <div class="tweet-header">
+                            <span class="tweet-author">${tweet.author}</span>
+                            <span class="tweet-handle">${tweet.handle}</span>
+                            <span class="tweet-time">· ${tweet.time}</span>
+                        </div>
+                        <div class="tweet-text">${tweet.content}</div>
+                        <div class="tweet-actions">
+                            <div class="tweet-action">
+                                <i class="far fa-comment"></i>
+                                <span>${tweet.comments}</span>
+                            </div>
+                            <div class="tweet-action ${tweet.retweeted ? 'retweeted' : ''}">
+                                <i class="fas fa-retweet"></i>
+                                <span>${tweet.retweets}</span>
+                            </div>
+                            <div class="tweet-action ${tweet.liked ? 'liked' : ''}">
+                                <i class="far fa-heart"></i>
+                                <span>${tweet.likes}</span>
+                            </div>
+                            <div class="tweet-action">
+                                <i class="far fa-share-square"></i>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                tweetFeed.appendChild(tweetElement);
+                
+                // اضافه کردن event listeners برای تعامل با توییت
+                const likeBtn = tweetElement.querySelector('.tweet-action:nth-child(3)');
+                const retweetBtn = tweetElement.querySelector('.tweet-action:nth-child(2)');
+                
+                likeBtn.addEventListener('click', function() {
+                    tweet.liked = !tweet.liked;
+                    tweet.likes = tweet.liked ? tweet.likes + 1 : tweet.likes - 1;
+                    localStorage.setItem('tweets', JSON.stringify(tweets));
+                    renderTweets();
+                });
+                
+                retweetBtn.addEventListener('click', function() {
+                    tweet.retweeted = !tweet.retweeted;
+                    tweet.retweets = tweet.retweeted ? tweet.retweets + 1 : tweet.retweets - 1;
+                    localStorage.setItem('tweets', JSON.stringify(tweets));
+                    renderTweets();
+                });
+            });
+        }
+        
+        // نمایش اعلان
+        function showNotification(message, type = 'success') {
+            notification.textContent = message;
+            notification.style.backgroundColor = type === 'error' ? 'var(--error-color)' : 'var(--success-color)';
+            notification.style.display = 'block';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+        
+        // اعتبارسنجی ایمیل
+        function isValidEmail(email) {
+            const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return re.test(String(email).toLowerCase());
+        }
+        
+        // مدیریت دکمه‌های دنبال کردن
+        document.querySelectorAll('.follow-button').forEach(button => {
+            button.addEventListener('click', function() {
+                if (this.classList.contains('following')) {
+                    this.classList.remove('following');
+                    this.textContent = 'دنبال کردن';
+                    showNotification('کاربر با موفقیت آنفالو شد');
+                } else {
+                    this.classList.add('following');
+                    this.textContent = 'دنبال شده';
+                    showNotification('کاربر با موفقیت فالو شد');
+                }
+            });
+        });
+        
+        // مدیریت منوی ناوبری
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+        
+        // مدیریت پروفایل کاربر
+        document.getElementById('userProfile').addEventListener('click', function() {
+            if (confirm('آیا می‌خواهید از حساب کاربری خود خارج شوید؟')) {
+                localStorage.removeItem('currentUser');
+                currentUser = null;
+                showAuth();
+                showNotification('با موفقیت از حساب کاربری خارج شدید');
+            }
+        });
+    </script>
+</body>
+</html>

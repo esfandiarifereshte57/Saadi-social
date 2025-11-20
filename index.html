@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سعدی‌توییت | شبکه اجتماعی فارسی</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #1d9bf0;
+            --hover-color: #1a8cd8;
+            --background-color: #15202b;
+            --card-color: #192734;
+            --text-color: #ffffff;
+            --text-secondary: #8b98a5;
+            --border-color: #38444d;
+            --success-color: #00ba7c;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            width: 250px;
+            padding: 20px;
+            position: fixed;
+            height: 100vh;
+            border-left: 1px solid var(--border-color);
+        }
+        
+        .logo {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo i {
+            margin-left: 10px;
+        }
+        
+        .logo-text {
+            font-weight: bold;
+            font-size: 22px;
+        }
+        
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            margin-bottom: 5px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            font-size: 20px;
+        }
+        
+        .nav-item.active {
+            font-weight: bold;
+        }
+        
+        .nav-item:hover {
+            background-color: rgba(29, 155, 240, 0.1);
+        }
+        
+        .nav-item i {
+            margin-left: 15px;
+            font-size: 24px;
+        }
+        
+        .tweet-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 15px 0;
+            width: 100%;
+            font-size: 17px;
+            font-weight: bold;
+            margin-top: 15px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .tweet-btn:hover {
+            background-color: var(--hover-color);
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            margin-top: auto;
+            padding: 10px;
+            border-radius: 30px;
+            cursor: pointer;
+            position: absolute;
+            bottom: 20px;
+            width: 90%;
+        }
+        
+        .user-profile:hover {
+            background-color: rgba(29, 155, 240, 0.1);
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            margin-left: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .user-info {
+            flex-grow: 1;
+        }
+        
+        .user-name {
+            font-weight: bold;
+        }
+        
+        .user-handle {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+        
+        .main-content {
+            flex-grow: 1;
+            margin-right: 250px;
+            margin-left: 350px;
+            border-right: 1px solid var(--border-color);
+            border-left: 1px solid var(--border-color);
+        }
+        
+        .header {
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            background-color: rgba(21, 32, 43, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+        }
+        
+        .header h1 {
+            font-size: 20px;
+        }
+        
+        .tweet-composer {
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+        }
+        
+        .composer-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            margin-left: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 20px;
+        }
+        
+        .composer-input {
+            flex-grow: 1;
+        }
+        
+        .composer-input textarea {
+            width: 100%;
+            background-color: transparent;
+            border: none;
+            color: var(--text-color);
+            font-size: 20px;
+            resize: none;
+            height: 60px;
+            padding: 10px 0;
+        }
+        
+        .composer-input textarea:focus {
+            outline: none;
+        }
+        
+        .composer-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+        }
+        
+        .action-icons {
+            display: flex;
+            color: var(--primary-color);
+        }
+        
+        .action-icons i {
+            margin-left: 15px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        
+        .tweet-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 8px 20px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .tweet-button:disabled {
+            opacity: 0.5;
+            cursor: default;
+        }
+        
+        .feed {
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .tweet {
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            transition: background-color 0.2s;
+        }
+        
+        .tweet:hover {
+            background-color: rgba(255, 255, 255, 0.02);
+        }
+        
+        .tweet-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #7856ff;
+            margin-left: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .tweet-content {
+            flex-grow: 1;
+        }
+        
+        .tweet-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        
+        .tweet-author {
+            font-weight: bold;
+            margin-left: 5px;
+        }
+        
+        .tweet-handle {
+            color: var(--text-secondary);
+            margin-left: 5px;
+        }
+        
+        .tweet-time {
+            color: var(--text-secondary);
+            margin-right: auto;
+        }
+        
+        .tweet-text {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+        
+        .tweet-actions {
+            display: flex;
+            justify-content: space-between;
+            max-width: 400px;
+            color: var(--text-secondary);
+        }
+        
+        .tweet-action {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .tweet-action i {
+            margin-left: 5px;
+            font-size: 16px;
+        }
+        
+        .tweet-action:hover {
+            color: var(--primary-color);
+        }
+        
+        .tweet-action.liked {
+            color: #f91880;
+        }
+        
+        .tweet-action.retweeted {
+            color: var(--success-color);
+        }
+        
+        .right-sidebar {
+            width: 350px;
+            padding: 20px;
+            position: fixed;
+            left: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        
+        .search-box {
+            background-color: var(--card-color);
+            border-radius: 30px;
+            padding: 12px 20px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .search-box i {
+            color: var(--text-secondary);
+            margin-left: 10px;
+        }
+        
+        .search-box input {
+            background-color: transparent;
+            border: none;
+            color: var(--text-color);
+            width: 100%;
+            font-size: 15px;
+        }
+        
+        .search-box input:focus {
+            outline: none;
+        }
+        
+        .trends-card, .who-to-follow {
+            background-color: var(--card-color);
+            border-radius: 15px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        .card-header {
+            padding: 15px;
+            font-weight: bold;
+            font-size: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .trend-item, .follow-item {
+            padding: 15px;
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .trend-item:hover, .follow-item:hover {
+            background-color: rgba(255, 255, 255, 0.03);
+        }
+        
+        .trend-category {
+            color: var(--text-secondary);
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+        
+        .trend-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .trend-count {
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+        
+        .follow-item {
+            display: flex;
+            align-items: center;
+        }
+        
+        .follow-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #ff7a00;
+            margin-left: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .follow-info {
+            flex-grow: 1;
+        }
+        
+        .follow-name {
+            font-weight: bold;
+        }
+        
+        .follow-handle {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+        
+        .follow-button {
+            background-color: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            border-radius: 30px;
+            padding: 7px 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .follow-button:hover {
+            background-color: rgba(29, 155, 240, 0.1);
+        }
+        
+        .follow-button.following {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .show-more {
+            padding: 15px;
+            color: var(--primary-color);
+            cursor: pointer;
+        }
+        
+        .footer {
+            padding: 15px;
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+        
+        .footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+        }
+        
+        .footer-link {
+            margin-left: 15px;
+            margin-bottom: 5px;
+            cursor: pointer;
+        }
+        
+        .footer-link:hover {
+            text-decoration: underline;
+        }
+        
+        .copyright {
+            text-align: center;
+            margin-top: 20px;
+            padding: 15px;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+        
+        .login-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .login-form {
+            background-color: var(--card-color);
+            border-radius: 15px;
+            padding: 30px;
+            width: 400px;
+            max-width: 90%;
+        }
+        
+        .login-form h2 {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid var(--border-color);
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+        
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        
+        .login-btn, .register-btn {
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .login-btn {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .register-btn {
+            background-color: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--success-color);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 5px;
+            display: none;
+            z-index: 1001;
+        }
+        
+        @media (max-width: 1200px) {
+            .right-sidebar {
+                display: none;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 70px;
+            }
+            
+            .nav-item span {
+                display: none;
+            }
+            
+            .user-info, .user-profile i {
+                display: none;
+            }
+            
+            .main-content {
+                margin-right: 70px;
+            }
+            
+            .logo-text {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- نوار کناری سمت راست -->
+    <div class="sidebar">
+        <div class="logo">
+            <i class="fab fa-twitter"></i>
+            <span class="logo-text">سعدی‌توییت</span>
+        </div>
+        
+        <div class="nav-item active">
+            <i class="fas fa-home"></i>
+            <span>خانه</span>
+        </div>
+        
+        <div class="nav-item">
+            <i class="fas fa-hashtag"></i>
+            <span>کاوش</span>
+        </div>
+        
+        <div class="nav-item">
+            <i class="fas fa-bell"></i>
+            <span>اعلان‌ها</span>
+        </div>
+        
+        <div class="nav-item">
+            <i class="fas fa-envelope"></i>
+            <span>پیام‌ها</span>
+        </div>
+        
+        <div class="nav-item">
+            <i class="fas fa-bookmark"></i>
+            <span>نشان‌ها</span>
+        </div>
+        
+        <div class="nav-item">
+            <i class="fas fa-list"></i>
+            <span>فهرست‌ها</span>
+        </div>
+        
+        <div class="nav-item">
+            <i class="fas fa-user"></i>
+            <span>پروفایل</span>
+        </div>
+        
+        <div class="nav-item">
+            <i class="fas fa-ellipsis-h"></i>
+            <span>بیشتر</span>
+        </div>
+        
+        <button class="tweet-btn">توییت</button>
+        
+        <div class="user-profile">
+            <div class="user-avatar">ع</div>
+            <div class="user-info">
+                <div class="user-name">علی رضایی</div>
+                <div class="user-handle">@alirezaei</div>
+            </div>
+            <i class="fas fa-ellipsis-h"></i>
+        </div>
+    </div>
+    
+    <!-- محتوای اصلی -->
+    <div class="main-content">
+        <div class="header">
+            <h1>خانه</h1>
+        </div>
+        
+        <div class="tweet-composer">
+            <div class="composer-avatar">ع</div>
+            <div class="composer-input">
+                <textarea placeholder="چه خبر؟"></textarea>
+                <div class="composer-actions">
+                    <div class="action-icons">
+                        <i class="far fa-image"></i>
+                        <i class="fas fa-poll"></i>
+                        <i class="far fa-smile"></i>
+                        <i class="far fa-calendar-alt"></i>
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <button class="tweet-button" disabled>توییت</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="feed">
+            <!-- توییت اول -->
+            <div class="tweet">
+                <div class="tweet-avatar">م</div>
+                <div class="tweet-content">
+                    <div class="tweet-header">
+                        <span class="tweet-author">محمد حسینی</span>
+                        <span class="tweet-handle">@mhoseini</span>
+                        <span class="tweet-time">· ۲ ساعت پیش</span>
+                    </div>
+                    <div class="tweet-text">
+                        امروز روز خوبی برای یادگیری برنامه‌نویسی است! چه پروژه‌ای در حال کار کردن هستید؟
+                    </div>
+                    <div class="tweet-actions">
+                        <div class="tweet-action">
+                            <i class="far fa-comment"></i>
+                            <span>۱۲</span>
+                        </div>
+                        <div class="tweet-action">
+                            <i class="fas fa-retweet"></i>
+                            <span>۵۴</span>
+                        </div>
+                        <div class="tweet-action">
+                            <i class="far fa-heart"></i>
+                            <span>۱۸۹</span>
+                        </div>
+                        <div class="tweet-action">
+                            <i class="far fa-share-square"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- توییت دوم -->
+            <div class="tweet">
+                <div class="tweet-avatar">س</div>
+                <div class="tweet-content">
+                    <div class="tweet-header">
+                        <span class="tweet-author">سارا محمدی</span>
+                        <span class="tweet-handle">@saramohammadi</span>
+                        <span class="tweet-time">· ۴ ساعت پیش</span>
+                    </div>
+                    <div class="tweet-text">
+                        طراحی رابط کاربری با تم تاریک واقعا جذاب است. به نظر شما کدام پالت رنگی برای تم تاریک بهتر است؟
+                    </div>
+                    <div class="tweet-actions">
+                        <div class="tweet-action">
+                            <i class="far fa-comment"></i>
+                            <span>۲۳</span>
+                        </div>
+                        <div class="tweet-action">
+                            <i class="fas fa-retweet"></i>
+                            <span>۴۱</span>
+                        </div>
+                        <div class="tweet-action">
+                            <i class="far fa-heart"></i>
+                            <span>۱۲۴</span>
+                        </div>
+                        <div class="tweet-action">
+                            <i class="far fa-share-square"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- توییت سوم -->
+            <div class="tweet">
+                <div class="tweet-avatar">ر</div>
+                <div class="tweet-content">
+                    <div class="tweet-header">
+                        <span class="tweet-author">رضا کریمی</span>
+                        <span class="tweet-handle">@rezakarimi</span>
+                        <span class="tweet-time">· ۶ ساعت پیش</span>
+                    </div>
+                    <div class="tweet-text">
+                        توییتر جدید با طراحی تاریک واقعا عالی شده! امکانات جدیدش رو دیدید؟
+                        <br>
+                        #طراحی_وب #توییتر
+                    </div>
+                    <div class="tweet-actions">
+                        <div class="tweet-action">
+                            <i class="far fa-comment"></i>
+                            <span>۸</span>
+                        </div>
+                        <div class="tweet-action">
+                            <i class="fas fa-retweet"></i>
+                            <span>۲۷</span>
+                        </div>
+                        <div class="tweet-action">
+                            <i class="far fa-heart"></i>
+                            <span>۹۶</span>
+                        </div>
+                        <div class="tweet-action">
+                            <i class="far fa-share-square"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- نوار کناری سمت چپ -->
+    <div class="right-sidebar">
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="جستجو در سعدی‌توییت">
+        </div>
+        
+        <div class="trends-card">
+            <div class="card-header">ترندها برای شما</div>
+            <div class="trend-item">
+                <div class="trend-category">ترند در ایران</div>
+                <div class="trend-name">#برنامه_نویسی_وب</div>
+                <div class="trend-count">۱۲٫۴ هزار توییت</div>
+            </div>
+            <div class="trend-item">
+                <div class="trend-category">ترند در ایران</div>
+                <div class="trend-name">#طراحی_تاریک</div>
+                <div class="trend-count">۸٫۷ هزار توییت</div>
+            </div>
+            <div class="trend-item">
+                <div class="trend-category">ترند در فناوری</div>
+                <div class="trend-name">CSS</div>
+                <div class="trend-count">۱۵٫۲ هزار توییت</div>
+            </div>
+            <div class="trend-item">
+                <div class="trend-category">ترند در برنامه‌نویسی</div>
+                <div class="trend-name">JavaScript</div>
+                <div class="trend-count">۲۱٫۸ هزار توییت</div>
+            </div>
+            <div class="show-more">نمایش بیشتر</div>
+        </div>
+        
+        <div class="who-to-follow">
+            <div class="card-header">پیشنهاد برای دنبال کردن</div>
+            <div class="follow-item">
+                <div class="follow-avatar">ف</div>
+                <div class="follow-info">
+                    <div class="follow-name">فرزاد احمدی</div>
+                    <div class="follow-handle">@fahmadi</div>
+                </div>
+                <button class="follow-button">دنبال کردن</button>
+            </div>
+            <div class="follow-item">
+                <div class="follow-avatar">ن</div>
+                <div class="follow-info">
+                    <div class="follow-name">نازنین جعفری</div>
+                    <div class="follow-handle">@nazjafari</div>
+                </div>
+                <button class="follow-button">دنبال کردن</button>
+            </div>
+            <div class="follow-item">
+                <div class="follow-avatar">ک</div>
+                <div class="follow-info">
+                    <div class="follow-name">کامبیز رضوی</div>
+                    <div class="follow-handle">@kamrez</div>
+                </div>
+                <button class="follow-button">دنبال کردن</button>
+            </div>
+            <div class="show-more">نمایش بیشتر</div>
+        </div>
+        
+        <div class="footer">
+            <div class="footer-links">
+                <div class="footer-link">شرایط خدمات</div>
+                <div class="footer-link">خط‌مشی حریم خصوصی</div>
+                <div class="footer-link">خط‌مشی کوکی‌ها</div>
+                <div class="footer-link">دسترسی‌پذیری</div>
+                <div class="footer-link">اطلاعات تبلیغات</div>
+                <div class="footer-link">بیشتر</div>
+            </div>
+            <div class="copyright">
+                © 2025 تمامی حقوق معنوی و مادی این سایت مربوط به گروه سعدی کد است.
+            </div>
+        </div>
+    </div>
+
+    <!-- مودال ورود -->
+    <div class="login-modal" id="loginModal">
+        <div class="login-form">
+            <h2>ورود به سعدی‌توییت</h2>
+            <div class="form-group">
+                <label for="username">نام کاربری یا ایمیل</label>
+                <input type="text" id="username">
+            </div>
+            <div class="form-group">
+                <label for="password">رمز عبور</label>
+                <input type="password" id="password">
+            </div>
+            <div class="form-actions">
+                <button class="register-btn">ثبت‌نام</button>
+                <button class="login-btn">ورود</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- اعلان -->
+    <div class="notification" id="notification">
+        عملیات با موفقیت انجام شد!
+    </div>
+
+    <script>
+        // مدیریت وضعیت کاربر
+        let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
+        let users = JSON.parse(localStorage.getItem('users')) || [];
+        
+        // فعال کردن دکمه توییت هنگام تایپ
+        const textarea = document.querySelector('.composer-input textarea');
+        const tweetButton = document.querySelector('.tweet-button');
+        
+        textarea.addEventListener('input', function() {
+            if (this.value.trim().length > 0) {
+                tweetButton.disabled = false;
+            } else {
+                tweetButton.disabled = true;
+            }
+        });
+        
+        // افزودن قابلیت کلیک روی آیتم‌های منو
+        const navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(item => {
+            item.addEventListener('click', function() {
+                navItems.forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+        
+        // مدیریت دکمه‌های دنبال کردن
+        const followButtons = document.querySelectorAll('.follow-button');
+        followButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                if (this.classList.contains('following')) {
+                    this.classList.remove('following');
+                    this.textContent = 'دنبال کردن';
+                    showNotification('کاربر با موفقیت آنفالو شد');
+                } else {
+                    this.classList.add('following');
+                    this.textContent = 'دنبال شده';
+                    showNotification('کاربر با موفقیت فالو شد');
+                }
+            });
+        });
+        
+        // مدیریت لایک و ریتوییت
+        const tweetActions = document.querySelectorAll('.tweet-action');
+        tweetActions.forEach(action => {
+            action.addEventListener('click', function() {
+                if (this.querySelector('.fa-heart')) {
+                    this.classList.toggle('liked');
+                    const count = this.querySelector('span');
+                    if (this.classList.contains('liked')) {
+                        count.textContent = parseInt(count.textContent) + 1;
+                        showNotification('توییت لایک شد');
+                    } else {
+                        count.textContent = parseInt(count.textContent) - 1;
+                    }
+                }
+                
+                if (this.querySelector('.fa-retweet')) {
+                    this.classList.toggle('retweeted');
+                    const count = this.querySelector('span');
+                    if (this.classList.contains('retweeted')) {
+                        count.textContent = parseInt(count.textContent) + 1;
+                        showNotification('توییت ریتوییت شد');
+                    } else {
+                        count.textContent = parseInt(count.textContent) - 1;
+                    }
+                }
+            });
+        });
+        
+        // نمایش اعلان
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.style.display = 'block';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+        
+        // مدیریت ارسال توییت
+        tweetButton.addEventListener('click', function() {
+            const tweetText = textarea.value.trim();
+            if (tweetText) {
+                // در اینجا توییت جدید به فید اضافه می‌شود
+                textarea.value = '';
+                tweetButton.disabled = true;
+                showNotification('توییت شما با موفقیت ارسال شد');
+                
+                // در حالت واقعی، اینجا توییت به سرور ارسال می‌شود
+                // و سپس به لیست توییت‌ها اضافه می‌گردد
+            }
+        });
+        
+        // مدیریت فرم ورود
+        const loginModal = document.getElementById('loginModal');
+        const loginBtn = document.querySelector('.login-btn');
+        const registerBtn = document.querySelector('.register-btn');
+        
+        // در حالت واقعی، این بخش با سرور ارتباط برقرار می‌کند
+        loginBtn.addEventListener('click', function() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (username && password) {
+                // در اینجا اطلاعات کاربر بررسی می‌شود
+                currentUser = {
+                    username: username,
+                    name: 'علی رضایی',
+                    handle: '@alirezaei'
+                };
+                
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                loginModal.style.display = 'none';
+                showNotification('با موفقیت وارد شدید');
+                
+                // به روزرسانی اطلاعات کاربر در صفحه
+                document.querySelector('.user-name').textContent = currentUser.name;
+                document.querySelector('.user-handle').textContent = currentUser.handle;
+                document.querySelector('.user-avatar').textContent = currentUser.name.charAt(0);
+                document.querySelector('.composer-avatar').textContent = currentUser.name.charAt(0);
+            } else {
+                showNotification('لطفا اطلاعات را کامل وارد کنید');
+            }
+        });
+        
+        registerBtn.addEventListener('click', function() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (username && password) {
+                // در اینجا کاربر جدید ثبت می‌شود
+                const newUser = {
+                    username: username,
+                    password: password, // در حالت واقعی این رمز باید هش شود
+                    name: username,
+                    handle: '@' + username.toLowerCase(),
+                    joinDate: new Date().toISOString()
+                };
+                
+                users.push(newUser);
+                localStorage.setItem('users', JSON.stringify(users));
+                
+                currentUser = newUser;
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                
+                loginModal.style.display = 'none';
+                showNotification('حساب کاربری با موفقیت ایجاد شد');
+                
+                // به روزرسانی اطلاعات کاربر در صفحه
+                document.querySelector('.user-name').textContent = currentUser.name;
+                document.querySelector('.user-handle').textContent = currentUser.handle;
+                document.querySelector('.user-avatar').textContent = currentUser.name.charAt(0);
+                document.querySelector('.composer-avatar').textContent = currentUser.name.charAt(0);
+            } else {
+                showNotification('لطفا اطلاعات را کامل وارد کنید');
+            }
+        });
+        
+        // اگر کاربر لاگین نکرده باشد، فرم ورود نمایش داده می‌شود
+        window.addEventListener('load', function() {
+            if (!currentUser) {
+                loginModal.style.display = 'flex';
+            } else {
+                // به روزرسانی اطلاعات کاربر در صفحه
+                document.querySelector('.user-name').textContent = currentUser.name;
+                document.querySelector('.user-handle').textContent = currentUser.handle;
+                document.querySelector('.user-avatar').textContent = currentUser.name.charAt(0);
+                document.querySelector('.composer-avatar').textContent = currentUser.name.charAt(0);
+            }
+        });
+    </script>
+</body>
+</html>
